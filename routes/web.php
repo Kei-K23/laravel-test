@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\PostController;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,15 +17,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layout', [
+        "heading" => "Users",
+        "posts" => Post::all()
+    ]);
 });
 
-Route::get("/hello", function () {
-    return 'hello world';
-});
+Route::get("/posts", [PostController::class, "index"]);
 
-Route::get("/student/{id}", function ($id, Request $req) {
-    return response("<h1>student $id</h1>
-    <h2>$req->name and $req->age</h2>
-    ", 200)->header("Content-Type", "text/html");
-})->where("id", "[0-9]+");
+Route::get("/posts/{post}", [PostController::class, "show"]);
