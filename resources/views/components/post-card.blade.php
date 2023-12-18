@@ -6,7 +6,7 @@
     <div class="flex">
         <img
             class="hidden w-48 mr-6 md:block"
-            src="/no-image.png"
+            src="{{$post->logo ? asset('storage/' . $post->logo) : asset('no-image.png')}}"
             alt=""
         />
         <div>
