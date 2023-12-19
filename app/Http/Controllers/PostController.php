@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -40,6 +41,8 @@ class PostController extends Controller
             'location' => 'required'
         ]);
 
+        $formFields['user_id'] = auth()->id();
+
         if ($req->hasFile("logo")) {
             $formFields["logo"] = $req->file("logo")->store("logos", 'public');
         }
@@ -56,6 +59,14 @@ class PostController extends Controller
 
     public function update(Request $req, Post $post)
     {
+
+        if ($post->user_id !== auth()->id()) {
+            return back()->with(
+                'message',
+                "Unauthorized"
+            );
+        }
+
         $formFields = $req->validate([
             "title" => "required",
             "description" => ["required", 'string'],
@@ -77,7 +88,22 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
+        if ($post->user_id !== auth()->id()) {
+            return back()->with(
+                'message',
+                "Unauthorized"
+            );
+        }
+
         $post->delete();
         return redirect('/posts')->with('message', 'Post deleted!');
+    }
+
+    public function manage()
+    {
+
+        $user = User::find(auth()->id());
+
+        return view('posts.manage', ['posts' => $user->post()->get()]);
     }
 }

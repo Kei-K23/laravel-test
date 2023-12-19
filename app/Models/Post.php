@@ -18,7 +18,8 @@ class Post extends Model
         'website',
         'tags',
         'location',
-        'logo'
+        'logo',
+        'user_id'
     ];
 
     public function scopeFilter($query, array $filters)
@@ -33,5 +34,10 @@ class Post extends Model
                 ->orWhere('description', 'like', '%' . request('search') . '%')
                 ->orWhere('tags', 'like', '%' . request('search') . '%');
         }
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

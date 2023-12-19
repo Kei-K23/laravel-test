@@ -37,17 +37,41 @@
                 ><img class="w-24" src="/logo.png" alt="" class="logo"
             /></a>
             <ul class="flex space-x-6 mr-6 text-lg">
+               @auth
+
                 <li>
-                    <a href="register.html" class="hover:text-laravel"
+                    <p>Welcome {{ auth()->user()->name }}</p>
+                </li>
+                <li>
+                    <a href="/posts/posts-manage" class="hover:text-laravel"
+                        ><i class="fa-solid fa-gear"></i>
+                        Manage Posts</a
+                    >
+                </li>
+                <li>
+                    <form action="{{ url('/logout') }}" method="post">
+                        @csrf
+                    <button class="submit">Logout</button>
+
+                </form>
+                </li>
+
+               @else
+
+                <li>
+                    <a href="{{url('/register')}}" class="hover:text-laravel"
                         ><i class="fa-solid fa-user-plus"></i> Register</a
                     >
                 </li>
                 <li>
-                    <a href="login.html" class="hover:text-laravel"
+                    <a href="{{url('/login')}}" class="hover:text-laravel"
                         ><i class="fa-solid fa-arrow-right-to-bracket"></i>
                         Login</a
                     >
                 </li>
+
+               @endauth
+
             </ul>
         </nav>
 
